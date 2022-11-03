@@ -137,7 +137,7 @@ export default function Alumno() {
               to={`/matricula/${value.id}`}
               className={`${
                 value.estaMatric
-                  ? 'before:w/5 pointer-events-none before:absolute  before:left-2 before:h-full before:w-[2px] before:rotate-45 before:rounded-full before:bg-red-500'
+                  ? 'before:w/5 pointer-events-none  before:absolute  before:left-2 before:h-full before:w-[2px] before:rotate-45 before:rounded-full before:bg-red-500'
                   : ''
               }   `}
             >

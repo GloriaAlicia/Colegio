@@ -206,29 +206,18 @@ export default function Matricula() {
               readOnly
             />
           </div>
-          <div>
-            <span className="block text-[0.8rem] text-slate-500">Periodo</span>
-            <select
-              value={periodo}
-              className="mt-0.5
-        w-60
-        rounded-lg
-        border
-        border-slate-200
-        bg-slate-50
-        p-2
-        text-sm
-        outline-none"
-              readOnly
-            >
-              <option value={DateTime.now().year}>
-                {`Ciclo-${DateTime.now().year}`}
-              </option>
-              <option value={DateTime.now().year + 1}>
-                {`Ciclo-${DateTime.now().year + 1}`}
-              </option>
-            </select>
-          </div>
+
+          <FormInput
+            id="periodo"
+            description="Periodo"
+            placeholder="Seleccione una opción"
+            value={periodo}
+            onInputChange={onInputChange}
+            selectValues={[
+              { id: '2022', name: `Ciclo-${DateTime.now().year}` },
+              { id: '2023', name: `Ciclo-${DateTime.now().year + 1}` },
+            ]}
+          />
         </div>
       </div>
       <div className="flex gap-10">
