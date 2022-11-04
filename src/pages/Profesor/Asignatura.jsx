@@ -19,18 +19,18 @@ export default function Asignatura() {
   const [asignar, setAsignar] = useState([]);
 
   const { id } = useParams();
-  const materias = useAsignatura(id);
+  const { getMaterias, materias } = useAsignatura();
 
   useEffect(() => {
     if (searchValue.trim().length > 0) {
-      colegioApi
+      colegioApimensaje
         .get(`/profesor/search/${searchValue}`)
         .then((response) => {
           setdata(
             response.data.map((item) => ({
               ...item,
               custom: {
-                id: item.profesor_id,
+                id: item.profesor_asignatura_id,
               },
             }))
           );
@@ -39,33 +39,18 @@ export default function Asignatura() {
           console.log(error);
         });
     } else {
-      // getProfesores();
+      getMaterias();
     }
   }, [searchValue]);
 
   const eliminar = useCallback(
     (id) => () => {
       colegioApi
-        .delete(`profesor/asignatura/byprofesor/${id}`)
+        .delete(`profesor/asignatura/${id}`)
         .then((response) => {
           console.log(response.data.mensaje);
-          getProfesores();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    []
-  );
-
-  const getProfesor = useCallback(
-    (id) => () => {
-      colegioApi
-        .get(`profesor/asignatura/byprofesor/${id}`)
-        .then((response) => {
-          console.log(response.data.mensaje);
-          // getProfesores();
-          setdata(response.data);
+          console.log(response.data);
+          getAsignaturas();
         })
         .catch((error) => {
           console.log(error);
@@ -76,33 +61,50 @@ export default function Asignatura() {
 
   useEffect(() => {
     console.log(asignar);
+  }, [asignar]);
 
+  const getAsignaturas = () => {
     colegioApi
       .get(`profesor/asignatura/byprofesor/${id}`)
       .then((response) => {
-        console.log(response.data.mensaje);
+        console.log(response.data);
         // getProfesores();
-        setdata(response.data);
+        // setdata(response.data);
+        setdata(
+          response.data.map((item) => ({
+            ...item,
+            custom: {
+              id: item.asignatura_id,
+            },
+          }))
+        );
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [asignar]);
+  };
 
-  const submitAsignar = () => useAsignarAsignatura(id, asignar);
+  const submitAsignar = () => {
+    useAsignarAsignatura(id, asignar);
+    getAsignaturas();
+    setAsignar([]);
+  };
+
+  useEffect(() => {
+    getAsignaturas();
+    getMaterias();
+  }, []);
 
   const handleChange = (target, idMateria) => {
     if (target.checked) {
       setAsignar((prevState) => {
         return [...prevState, idMateria];
       });
-      console.log(idMateria, 'true if');
     } else {
       setAsignar((prevState) => {
         const eliminar = prevState.filter((id) => id !== idMateria);
         return eliminar;
       });
-      console.log('else');
     }
   };
 
@@ -115,7 +117,6 @@ export default function Asignatura() {
         Cell: ({ value }) => {
           return (
             <div className="flex justify-between gap-4">
-              <label htmlFor={value.htmlId}>asignar</label>
               <InputCheck
                 name={value.htmlId}
                 onChange={(e) => handleChange(e.target, value.id)}
@@ -177,7 +178,7 @@ export default function Asignatura() {
         Cell: ({ value }) => {
           return (
             <div className="flex justify-between gap-4">
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon={faTrash} onClick={eliminar(value.id)} />
             </div>
           );
         },
@@ -196,7 +197,7 @@ export default function Asignatura() {
         <span className="block text-lg font-medium">Profesor-Asignatura</span>
       </div>
       <Modal>
-        <div className="flex items-center justify-between">
+        <div className="flex w-11/12 items-center justify-between">
           <h2 className="text-lg font-medium"> Asociar cursos </h2>
 
           <div className="hover-scale-item flex w-32 cursor-default items-center gap-2 rounded-full bg-gray-100 py-2 px-5 hover:scale-100 md:w-56">

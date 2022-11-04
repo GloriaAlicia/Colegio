@@ -1,13 +1,15 @@
 import colegioApi from '../api/colegioApi';
 
 export const useAsignarAsignatura = (profesorId, materias) => {
-  const obj = {};
+  const promises = [];
   const asignar = (profesorId, materiaId) => {
-    console.log(profesorId, materiaId);
     colegioApi
       .post(`/profesor/asignatura`, {
         profesor_id: profesorId,
-        materia_id: materiaId,
+        asignatura_id: materiaId,
+      })
+      .then(function (response) {
+        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -15,6 +17,10 @@ export const useAsignarAsignatura = (profesorId, materias) => {
   };
 
   materias.forEach((materiaId) => {
-    asignar(profesorId, materiaId);
+    promises.push(asignar(profesorId, materiaId));
   });
+
+  Promise.allSettled(promises).then((results) =>
+    results.forEach((result) => console.log(result.status))
+  );
 };
