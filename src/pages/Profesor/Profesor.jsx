@@ -3,10 +3,10 @@ import {
   faPenToSquare,
   faTrash,
   faUsersLine,
+  faBookOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
 import { Link } from 'react-router-dom';
 import colegioApi from '../../api/colegioApi';
 import Table from '../../components/Table';
@@ -107,6 +107,13 @@ export default function Profesor() {
         // eslint-disable-next-line react/no-unstable-nested-components
         Cell: ({ value }) => (
           <div className="flex justify-between gap-4">
+            <Link to={`/profesorasignatura/${value.id}`}>
+              <FontAwesomeIcon
+                className="text-xl text-green-500"
+                icon={faBookOpen}
+              />
+            </Link>
+
             <Link to={`/formprofesor/${value.id}`}>
               <FontAwesomeIcon
                 className="text-xl text-blue-500"

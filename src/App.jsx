@@ -10,6 +10,7 @@ import FormProfesor from './pages/Profesor/FormProfesor';
 import Apoderado from './pages/Apoderado/Apoderado';
 import FormApoderado from './pages/Apoderado/FormApoderado';
 import Matricula from './pages/Alumno/Matricula';
+import Asignatura from './pages/Profesor/Asignatura';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/formalumno" element={<FormAlumno />} />
               <Route path="/formalumno/:id" element={<FormAlumno />} />
               <Route path="/profesor" element={<Profesor />} />
+              <Route path="/profesorasignatura/:id" element={<Asignatura />} />
               <Route path="/formprofesor" element={<FormProfesor />} />
               <Route path="/formprofesor/:id" element={<FormProfesor />} />
               <Route path="/apoderado" element={<Apoderado />} />
