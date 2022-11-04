@@ -26,5 +26,6 @@ export const useAsignatura = () => {
   return {
     getMaterias,
     materias,
+    setMaterias,
   };
 };

@@ -19,14 +19,14 @@ export default function Asignatura() {
   const [asignar, setAsignar] = useState([]);
 
   const { id } = useParams();
-  const { getMaterias, materias } = useAsignatura();
+  const { getMaterias, materias, setMaterias } = useAsignatura();
 
   useEffect(() => {
     if (searchValue.trim().length > 0) {
-      colegioApimensaje
-        .get(`/profesor/search/${searchValue}`)
+      colegioApi
+        .get(`/profesor/asignatura/free/search/${searchValue}`)
         .then((response) => {
-          setdata(
+          setMaterias(
             response.data.map((item) => ({
               ...item,
               custom: {
@@ -68,8 +68,6 @@ export default function Asignatura() {
       .get(`profesor/asignatura/byprofesor/${id}`)
       .then((response) => {
         console.log(response.data);
-        // getProfesores();
-        // setdata(response.data);
         setdata(
           response.data.map((item) => ({
             ...item,

@@ -16,11 +16,15 @@ export const useAsignarAsignatura = (profesorId, materias) => {
       });
   };
 
-  materias.forEach((materiaId) => {
-    promises.push(asignar(profesorId, materiaId));
-  });
+  if (materias > 1) {
+    materias.forEach((materiaId) => {
+      promises.push(asignar(profesorId, materiaId));
+    });
 
-  Promise.allSettled(promises).then((results) =>
-    results.forEach((result) => console.log(result.status))
-  );
+    Promise.allSettled(promises).then((results) =>
+      results.forEach((result) => console.log(result.status))
+    );
+  } else {
+    asignar(profesorId, materias[0]);
+  }
 };
