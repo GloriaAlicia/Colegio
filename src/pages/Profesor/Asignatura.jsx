@@ -203,7 +203,7 @@ export default function Asignatura() {
         />
         <span className="block text-lg font-medium">Profesor-Asignatura</span>
       </div>
-      <Modal open={open} setOpen={setOpen} cerrar={cerrar}>
+      <Modal open={open} setOpen={setOpen} cerrar={cerrar} abrir={true}>
         <div className="flex w-11/12 items-center justify-between">
           <h2 className="text-lg font-medium"> Asociar cursos </h2>
 

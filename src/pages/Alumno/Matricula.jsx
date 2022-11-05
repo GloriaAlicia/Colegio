@@ -3,10 +3,12 @@ import { DateTime } from 'luxon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import warn from '../../assets/warn.svg';
 
 import FormInput from '../../components/FormInput';
 import useForm from '../../hooks/useForm';
 import colegioApi from '../../api/colegioApi';
+import { Modal } from '../../components/Modal';
 
 export default function Matricula() {
   const [
@@ -41,6 +43,7 @@ export default function Matricula() {
   const [listGrado, setListGrado] = useState([]);
 
   const { id } = useParams();
+  const [open, setOpen] = useState('hidden');
 
   useEffect(() => {
     setisValid(
@@ -99,6 +102,8 @@ export default function Matricula() {
         console.log(error);
       });
   };
+
+  const cerrar = () => setOpen('hidden');
 
   return (
     <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-10 shadow-xl">
@@ -220,6 +225,47 @@ export default function Matricula() {
           />
         </div>
       </div>
+
+      <Modal open={open} setOpen={setOpen} cerrar={cerrar} abrir={false}>
+        <div className="flex flex-col items-center justify-center md:flex-row">
+          <img
+            src={warn}
+            alt="alerta de matriculacion"
+            className="max-w-xs drop-shadow-md lg:rotate-6"
+          />
+          <div className="flex flex-col items-center justify-center gap-3">
+            <div className="flex flex-col items-center lg:w-4/5">
+              <h3 className="mb-2 gap-3 text-center font-sans text-3xl font-bold text-slate-900">
+                ¿Esta seguro de matricularse?
+              </h3>
+              <p className="lg:text-center">
+                Esta acción será irreversible, por lo tanto no podrá eliminar su
+                matricula más tarde.
+              </p>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                className={
+                  'rounded-md bg-[#635DFF] px-5 py-1 text-lg text-white md:py-1.5 md:px-7'
+                }
+                onClick={() => {
+                  matricularAlumno();
+                }}
+              >
+                Matricularse
+              </button>
+
+              <button
+                className="rounded-md bg-red-500 px-5 py-1 text-lg text-white md:py-1.5 md:px-7"
+                onClick={cerrar}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
       <div className="flex gap-10">
         <button
           type="submit"
@@ -229,7 +275,9 @@ export default function Matricula() {
               : 'cursor-not-allowed rounded-md bg-gray-500 py-1.5 px-10 text-xs text-gray-300'
           }
           onClick={() => {
-            matricularAlumno();
+            if (isValid) {
+              setOpen('');
+            }
           }}
         >
           Guardar
