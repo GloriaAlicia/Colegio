@@ -17,6 +17,7 @@ export default function Asignatura() {
   const [data, setdata] = useState([]);
   const [searchValue, setsearchValue] = useState('');
   const [asignar, setAsignar] = useState([]);
+  const [open, setOpen] = useState('hidden');
 
   const { id } = useParams();
   const { getMaterias, materias, setMaterias } = useAsignatura();
@@ -43,27 +44,23 @@ export default function Asignatura() {
     }
   }, [searchValue]);
 
-  const eliminar = useCallback(
-    (id) => () => {
-      colegioApi
-        .delete(`profesor/asignatura/${id}`)
-        .then((response) => {
-          console.log(response.data.mensaje);
-          console.log(response.data);
-          getAsignaturas();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    []
-  );
+  const eliminar = useCallback((id) => {
+    colegioApi
+      .delete(`profesor/asignatura/${id}`)
+      .then((response) => {
+        console.log(response.data.mensaje);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-  useEffect(() => {
-    console.log(asignar);
-  }, [asignar]);
+  // useEffect(() => {
+  //   console.log(asignar);
+  // }, [asignar]);
 
-  const getAsignaturas = () => {
+  const getAsignaturasProfesor = () => {
     colegioApi
       .get(`profesor/asignatura/byprofesor/${id}`)
       .then((response) => {
@@ -72,7 +69,7 @@ export default function Asignatura() {
           response.data.map((item) => ({
             ...item,
             custom: {
-              id: item.asignatura_id,
+              id: item.profesor_asignatura_id,
             },
           }))
         );
@@ -80,16 +77,25 @@ export default function Asignatura() {
       .catch((error) => {
         console.log(error);
       });
+    // getAsignaturasProfesor();
+  };
+
+  const cerrar = () => {
+    setOpen('hidden');
+    setAsignar([]);
+    // resetear checkbox
   };
 
   const submitAsignar = () => {
     useAsignarAsignatura(id, asignar);
-    getAsignaturas();
-    setAsignar([]);
+    setTimeout(() => {
+      getAsignaturasProfesor();
+    }, 1000);
+    cerrar();
   };
 
   useEffect(() => {
-    getAsignaturas();
+    getAsignaturasProfesor();
     getMaterias();
   }, []);
 
@@ -175,8 +181,16 @@ export default function Asignatura() {
         // eslint-disable-next-line react/no-unstable-nested-components
         Cell: ({ value }) => {
           return (
-            <div className="flex justify-between gap-4">
-              <FontAwesomeIcon icon={faTrash} onClick={eliminar(value.id)} />
+            <div className="flex cursor-pointer justify-between gap-4 text-xl text-red-500">
+              <FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => {
+                  eliminar(value.id);
+                  setTimeout(() => {
+                    getAsignaturasProfesor();
+                  }, 1000);
+                }}
+              />
             </div>
           );
         },
@@ -194,7 +208,7 @@ export default function Asignatura() {
         />
         <span className="block text-lg font-medium">Profesor-Asignatura</span>
       </div>
-      <Modal>
+      <Modal open={open} setOpen={setOpen} cerrar={cerrar}>
         <div className="flex w-11/12 items-center justify-between">
           <h2 className="text-lg font-medium"> Asociar cursos </h2>
 
@@ -222,7 +236,7 @@ export default function Asignatura() {
           <button
             className="rounded-md bg-[#635DFF] py-1.5 px-10 text-center text-sm text-white"
             onClick={submitAsignar}
-            disabled={asignar < 1}
+            disabled={asignar < 0}
           >
             Asignar
           </button>
@@ -234,12 +248,12 @@ export default function Asignatura() {
       </div>
 
       <div className="flex w-full justify-end">
-        <Link to="/formprofesor">
+        <Link to="/profesor">
           <button
             type="submit"
             className="rounded-md bg-[#635DFF] py-1.5 px-10 text-sm text-white"
           >
-            Añadir
+            Regresar
           </button>
         </Link>
       </div>

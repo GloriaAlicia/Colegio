@@ -16,7 +16,9 @@ export const useAsignarAsignatura = (profesorId, materias) => {
       });
   };
 
-  if (materias > 1) {
+  console.log(materias);
+
+  if (materias.length > 1) {
     materias.forEach((materiaId) => {
       promises.push(asignar(profesorId, materiaId));
     });
@@ -24,7 +26,12 @@ export const useAsignarAsignatura = (profesorId, materias) => {
     Promise.allSettled(promises).then((results) =>
       results.forEach((result) => console.log(result.status))
     );
-  } else {
+
+    console.log('mayor a 1');
+  } else if (materias.length === 1) {
     asignar(profesorId, materias[0]);
+    console.log('es solo 1');
+  } else {
+    console.log('hay', materias.length);
   }
 };

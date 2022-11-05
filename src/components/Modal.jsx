@@ -1,11 +1,8 @@
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 
-export const Modal = ({ children }) => {
-  const [open, setOpen] = useState('hidden');
-
+export const Modal = ({ children, open, setOpen, cerrar }) => {
   return (
     <>
       {/* sección para abrir modal */}
@@ -32,6 +29,7 @@ export const Modal = ({ children }) => {
                 <FontAwesomeIcon
                   icon={faXmark}
                   className="text-2xl text-slate-900"
+                  onClick={cerrar}
                 />
               </button>
             </div>
