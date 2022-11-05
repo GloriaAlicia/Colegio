@@ -83,7 +83,7 @@ export default function Asignatura() {
   const cerrar = () => {
     setOpen('hidden');
     setAsignar([]);
-    // resetear checkbox
+    getMaterias();
   };
 
   const submitAsignar = () => {
@@ -150,7 +150,7 @@ export default function Asignatura() {
         accessor: 'grado',
       },
     ],
-    [eliminar]
+    [eliminar, materias]
   );
 
   const columnsProfesor = useMemo(
