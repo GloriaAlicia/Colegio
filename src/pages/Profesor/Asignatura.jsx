@@ -31,7 +31,7 @@ export default function Asignatura() {
             response.data.map((item) => ({
               ...item,
               custom: {
-                id: item.profesor_asignatura_id,
+                id: item.asignatura_id,
               },
             }))
           );
@@ -56,10 +56,6 @@ export default function Asignatura() {
       });
   }, []);
 
-  // useEffect(() => {
-  //   console.log(asignar);
-  // }, [asignar]);
-
   const getAsignaturasProfesor = () => {
     colegioApi
       .get(`profesor/asignatura/byprofesor/${id}`)
@@ -77,7 +73,6 @@ export default function Asignatura() {
       .catch((error) => {
         console.log(error);
       });
-    // getAsignaturasProfesor();
   };
 
   const cerrar = () => {
@@ -236,7 +231,7 @@ export default function Asignatura() {
           <button
             className="rounded-md bg-[#635DFF] py-1.5 px-10 text-center text-sm text-white"
             onClick={submitAsignar}
-            disabled={asignar < 0}
+            disabled={asignar <= 0}
           >
             Asignar
           </button>
