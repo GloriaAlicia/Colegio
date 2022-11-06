@@ -125,16 +125,16 @@ export default function Matricula() {
   const cerrar = () => setOpen('hidden');
 
   return (
-    <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-10 shadow-xl">
+    <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-0 sm:p-10 sm:shadow-xl">
       <div className="flex flex-col">
         <FontAwesomeIcon
-          className="mb-3 text-5xl text-orange-400"
+          className="my-3 text-5xl text-orange-400"
           icon={faUsersLine}
         />
         <span className="text-lg font-medium">Matricula Alumno</span>
       </div>
       <div>
-        <div className="grid grid-cols-2 gap-10">
+        <div className="flex flex-col gap-10 sm:grid sm:grid-cols-2">
           <FormInput
             id="situacionId"
             description="Situacion"
@@ -285,7 +285,7 @@ export default function Matricula() {
         </div>
       </Modal>
 
-      <div className="flex gap-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:gap-7">
         <button
           type="submit"
           className={
@@ -325,10 +325,10 @@ export default function Matricula() {
         >
           Guardar
         </button>
-        <Link to="/alumno">
+        <Link to="/alumno" className="p-0">
           <button
             type="submit"
-            className="rounded-md bg-red-500 py-1.5 px-10 text-xs text-white"
+            className="h-full w-full rounded-md bg-red-500 py-1.5  px-10 text-xs text-white"
           >
             Cancelar
           </button>
