@@ -27,7 +27,7 @@ export default function ApoderadoAlumno() {
   useEffect(() => {
     if (searchName.trim().length > 0) {
       colegioApi
-        .get(`alumno/search/${searchName}`)
+        .get(`alumno/apoderado/free/${id}/search/${searchName}`)
         .then((response) => {
           setAlumnos(
             response.data.map((item) => ({
@@ -42,7 +42,7 @@ export default function ApoderadoAlumno() {
           console.log(error);
         });
     } else {
-      getAlumnos();
+      getAlumnos(id);
     }
   }, [searchName]);
 
@@ -65,7 +65,7 @@ export default function ApoderadoAlumno() {
   const cerrar = () => {
     setOpen('hidden');
     setAsignar([]);
-    getAlumnos();
+    getAlumnos(id);
   };
 
   const submitAsignar = () => {
@@ -77,7 +77,7 @@ export default function ApoderadoAlumno() {
   };
 
   useEffect(() => {
-    getAlumnos();
+    getAlumnos(id);
     getAlumnosDeApoderado(id);
   }, []);
 

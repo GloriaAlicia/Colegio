@@ -4,9 +4,9 @@ import colegioApi from '../api/colegioApi';
 export const useGetAlumnos = () => {
   const [alumnos, setAlumnos] = useState([]);
 
-  const getAlumnos = () => {
+  const getAlumnos = (id) => {
     colegioApi
-      .get(`alumno`)
+      .get(`alumno/apoderado/free/${id}`)
       .then((response) => {
         console.log(response);
         setAlumnos(
