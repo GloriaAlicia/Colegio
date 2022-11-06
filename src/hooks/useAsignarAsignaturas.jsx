@@ -1,6 +1,6 @@
 import colegioApi from '../api/colegioApi';
 
-export const useAsignarAsignatura = (profesorId, materias) => {
+export const useAsignarAsignaturas = (profesorId, materias) => {
   const promises = [];
   const asignar = (profesorId, materiaId) => {
     colegioApi
@@ -26,12 +26,9 @@ export const useAsignarAsignatura = (profesorId, materias) => {
     Promise.allSettled(promises).then((results) =>
       results.forEach((result) => console.log(result.status))
     );
-
-    console.log('mayor a 1');
   } else if (materias.length === 1) {
     asignar(profesorId, materias[0]);
-    console.log('es solo 1');
   } else {
-    console.log('hay', materias.length);
+    return;
   }
 };

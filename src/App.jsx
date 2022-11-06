@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -11,6 +10,7 @@ import Apoderado from './pages/Apoderado/Apoderado';
 import FormApoderado from './pages/Apoderado/FormApoderado';
 import Matricula from './pages/Alumno/Matricula';
 import Asignatura from './pages/Profesor/Asignatura';
+import ApoderadoAlumno from './pages/Apoderado/ApoderadoAlumno';
 
 function App() {
   return (
@@ -29,6 +29,10 @@ function App() {
               <Route path="/formprofesor" element={<FormProfesor />} />
               <Route path="/formprofesor/:id" element={<FormProfesor />} />
               <Route path="/apoderado" element={<Apoderado />} />
+              <Route
+                path="/apoderadoalumno/:id"
+                element={<ApoderadoAlumno />}
+              />
               <Route path="/formapoderado" element={<FormApoderado />} />
               <Route path="/formapoderado/:id" element={<FormApoderado />} />
               <Route path="/matricula/:id" element={<Matricula />} />

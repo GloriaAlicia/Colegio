@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import colegioApi from '../api/colegioApi';
 
-export const useAsignatura = () => {
-  const [materias, setMaterias] = useState([]);
+export const useGetAlumnos = () => {
+  const [alumnos, setAlumnos] = useState([]);
 
-  const getMaterias = () => {
+  const getAlumnos = () => {
     colegioApi
-      .get(`/profesor/asignatura/free`)
+      .get(`alumno`)
       .then((response) => {
-        setMaterias(
+        console.log(response);
+        setAlumnos(
           response.data.map((item) => ({
             ...item,
             custom: {
-              id: item.asignatura_id,
-              htmlId: (item.asignatura += item.asignatura_id),
+              id: item.alumno_id,
             },
           }))
         );
@@ -24,8 +24,8 @@ export const useAsignatura = () => {
   };
 
   return {
-    getMaterias,
-    materias,
-    setMaterias,
+    getAlumnos,
+    alumnos,
+    setAlumnos,
   };
 };

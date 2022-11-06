@@ -1,7 +1,7 @@
 import {
   faMagnifyingGlass,
   faTrash,
-  faBookOpenReader,
+  faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,28 +10,30 @@ import colegioApi from '../../api/colegioApi';
 import { InputCheck } from '../../components/atoms/InputCheck';
 import { Modal } from '../../components/Modal';
 import Table from '../../components/Table';
-import { useAsignarAsignaturas } from '../../hooks/useAsignarAsignaturas';
-import { useAsignatura } from '../../hooks/useAsignatura';
+import { useAsignarAlumnos } from '../../hooks/useAsignarAlumnos';
+import { useGetAlumnos } from '../../hooks/useGetAlumnos';
+import { useGetApoderado } from '../../hooks/useGetApoderado';
 
-export default function Asignatura() {
-  const [data, setdata] = useState([]);
-  const [searchValue, setsearchValue] = useState('');
-  const [asignar, setAsignar] = useState([]);
-  const [open, setOpen] = useState('hidden');
+export default function ApoderadoAlumno() {
+  const [searchName, setSearchName] = useState('');
+  const [asignar, setAsignar] = useState([]); // id's de alumnos
+  const [open, setOpen] = useState('hidden'); // modal/abrir
 
   const { id } = useParams();
-  const { getMaterias, materias, setMaterias } = useAsignatura();
+  const { getAlumnosDeApoderado, alumnosApoderado, setAlumnosApoderado } =
+    useGetApoderado(); //pantalla
+  const { getAlumnos, alumnos, setAlumnos } = useGetAlumnos(); // modal
 
   useEffect(() => {
-    if (searchValue.trim().length > 0) {
+    if (searchName.trim().length > 0) {
       colegioApi
-        .get(`/profesor/asignatura/free/search/${searchValue}`)
+        .get(`alumno/search/${searchName}`)
         .then((response) => {
-          setMaterias(
+          setAlumnos(
             response.data.map((item) => ({
               ...item,
               custom: {
-                id: item.asignatura_id,
+                id: item.alumno_id,
               },
             }))
           );
@@ -40,13 +42,13 @@ export default function Asignatura() {
           console.log(error);
         });
     } else {
-      getMaterias();
+      getAlumnos();
     }
-  }, [searchValue]);
+  }, [searchName]);
 
   const eliminar = useCallback((id) => {
     colegioApi
-      .delete(`profesor/asignatura/${id}`)
+      .delete(`alumno/apoderado/${id}`)
       .then((response) => {
         console.log(response.data.mensaje);
         console.log(response.data);
@@ -56,42 +58,27 @@ export default function Asignatura() {
       });
   }, []);
 
-  const getAsignaturasProfesor = () => {
-    colegioApi
-      .get(`profesor/asignatura/byprofesor/${id}`)
-      .then((response) => {
-        console.log(response.data);
-        setdata(
-          response.data.map((item) => ({
-            ...item,
-            custom: {
-              id: item.profesor_asignatura_id,
-            },
-          }))
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  useEffect(() => {
+    console.log(asignar);
+  }, [asignar]);
 
   const cerrar = () => {
     setOpen('hidden');
     setAsignar([]);
-    getMaterias();
+    getAlumnos();
   };
 
   const submitAsignar = () => {
-    useAsignarAsignaturas(id, asignar);
+    useAsignarAlumnos(id, asignar);
     setTimeout(() => {
-      getAsignaturasProfesor();
+      getAlumnosDeApoderado(id);
     }, 1000);
     cerrar();
   };
 
   useEffect(() => {
-    getAsignaturasProfesor();
-    getMaterias();
+    getAlumnos();
+    getAlumnosDeApoderado(id);
   }, []);
 
   const handleChange = (target, idMateria) => {
@@ -107,60 +94,96 @@ export default function Asignatura() {
     }
   };
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'Seleccionar',
-        accessor: 'custom',
-        // eslint-disable-next-line react/no-unstable-nested-components
-        Cell: ({ value }) => {
-          return (
-            <div className="flex justify-between gap-4">
-              <InputCheck
-                name={value.htmlId}
-                onChange={(e) => handleChange(e.target, value.id)}
-              />
-            </div>
-          );
-        },
+  const columnsCustomModal = [
+    {
+      Header: 'Seleccionar',
+      accessor: 'custom',
+      // eslint-disable-next-line react/no-unstable-nested-components
+      Cell: ({ value }) => {
+        return (
+          <div className="flex justify-between gap-4">
+            <InputCheck
+              name={value.id}
+              onChange={(e) => handleChange(e.target, value.id)}
+            />
+          </div>
+        );
       },
-      {
-        Header: 'Cursos',
-        accessor: 'asignatura',
-      },
-      {
-        Header: 'Seccion',
-        accessor: 'seccion',
-      },
-      {
-        Header: 'Turno',
-        accessor: 'turno',
-      },
-      {
-        Header: 'Nivel',
-        accessor: 'nivel',
-      },
-      {
-        Header: 'Grado',
-        accessor: 'grado',
-      },
-    ],
-    [eliminar, materias]
-  );
+    },
+    {
+      Header: 'Alumnos',
+      accessor: 'nombres',
+    },
+    {
+      Header: 'Documento',
+      accessor: 'documento',
+    },
+    {
+      Header: 'N° Documento',
+      accessor: 'numero_documento',
+    },
+    {
+      Header: 'Edad',
+      accessor: 'edad',
+    },
+    {
+      Header: 'Sexo',
+      accessor: 'sexo',
+    },
+    {
+      Header: 'Nivel',
+      accessor: 'nivel',
+    },
+    {
+      Header: 'Grado',
+      accessor: 'grado',
+    },
+    {
+      Header: 'Modalidad',
+      accessor: 'modalidad',
+    },
+    {
+      Header: 'Turno',
+      accessor: 'turno',
+    },
+    {
+      Header: 'Estado',
+      accessor: 'estado',
+    },
+    {
+      Header: 'Situación',
+      accessor: 'situacion',
+    },
+    {
+      Header: 'Matriculado',
+      accessor: 'matriculado',
+    },
+  ];
 
-  const columnsProfesor = useMemo(
+  //  eliminar, materias dependencias
+  const columnsModal = useMemo(() => columnsCustomModal, [eliminar, alumnos]);
+
+  const columnsApoderado = useMemo(
     () => [
       {
-        Header: 'Cursos',
-        accessor: 'asignatura',
+        Header: 'Alumnos',
+        accessor: 'nombres',
       },
       {
-        Header: 'Seccion',
-        accessor: 'seccion',
+        Header: 'Documento',
+        accessor: 'documento',
       },
       {
-        Header: 'Turno',
-        accessor: 'turno',
+        Header: 'N° Documento',
+        accessor: 'numero_documento',
+      },
+      {
+        Header: 'Edad',
+        accessor: 'edad',
+      },
+      {
+        Header: 'Sexo',
+        accessor: 'sexo',
       },
       {
         Header: 'Nivel',
@@ -169,6 +192,26 @@ export default function Asignatura() {
       {
         Header: 'Grado',
         accessor: 'grado',
+      },
+      {
+        Header: 'Modalidad',
+        accessor: 'modalidad',
+      },
+      {
+        Header: 'Turno',
+        accessor: 'turno',
+      },
+      {
+        Header: 'Estado',
+        accessor: 'estado',
+      },
+      {
+        Header: 'Situación',
+        accessor: 'situacion',
+      },
+      {
+        Header: 'Matriculado',
+        accessor: 'matriculado',
       },
       {
         Header: '',
@@ -180,9 +223,9 @@ export default function Asignatura() {
               <FontAwesomeIcon
                 icon={faTrash}
                 onClick={() => {
-                  eliminar(value.id);
+                  eliminar(value.deleteId);
                   setTimeout(() => {
-                    getAsignaturasProfesor();
+                    getAlumnosDeApoderado(id);
                   }, 1000);
                 }}
               />
@@ -199,9 +242,9 @@ export default function Asignatura() {
       <div className="text-center">
         <FontAwesomeIcon
           className="mb-3 text-5xl text-orange-400"
-          icon={faBookOpenReader}
+          icon={faUserGroup}
         />
-        <span className="block text-lg font-medium">Profesor-Asignatura</span>
+        <span className="block text-lg font-medium">Apoderado-Alumno</span>
       </div>
       <Modal open={open} setOpen={setOpen} cerrar={cerrar} abrir={true}>
         <div className="flex w-11/12 items-center justify-between">
@@ -214,17 +257,17 @@ export default function Asignatura() {
               className="w-full bg-transparent outline-none"
               type="text"
               placeholder="Buscar"
-              value={searchValue}
+              value={searchName}
               onChange={({ target }) => {
                 const { value } = target;
-                setsearchValue(value);
+                setSearchName(value);
               }}
             />
           </div>
         </div>
 
         <div className="my-2 max-h-80 overflow-scroll">
-          <Table columns={columns} data={materias} />
+          <Table columns={columnsModal} data={alumnos} />
         </div>
 
         <div className="flex w-full items-center justify-center">
@@ -233,17 +276,17 @@ export default function Asignatura() {
             onClick={submitAsignar}
             disabled={asignar <= 0}
           >
-            Asignar
+            Guardar
           </button>
         </div>
       </Modal>
 
       <div className="w-full overflow-x-auto border">
-        <Table columns={columnsProfesor} data={data} />
+        <Table columns={columnsApoderado} data={alumnosApoderado} />
       </div>
 
       <div className="flex w-full justify-end">
-        <Link to="/profesor">
+        <Link to="/apoderado">
           <button
             type="submit"
             className="rounded-md bg-[#635DFF] py-1.5 px-10 text-sm text-white"

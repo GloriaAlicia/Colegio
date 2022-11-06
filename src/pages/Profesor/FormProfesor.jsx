@@ -300,6 +300,7 @@ export default function FormProfesor() {
           />
           <FormInput
             id="nroDocumento"
+            maxLength={9}
             description="Nro Documento"
             placeholder="Inserte el documento"
             type="number"

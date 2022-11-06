@@ -279,6 +279,7 @@ export default function FormAlumno() {
           />
           <FormInput
             id="nroDocumento"
+            maxLength={9}
             description="Nro Documento"
             placeholder="Inserte el documento"
             type="number"

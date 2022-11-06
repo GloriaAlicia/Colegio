@@ -2,6 +2,7 @@ import {
   faMagnifyingGlass,
   faPenToSquare,
   faTrash,
+  faUserGroup,
   faUsersLine,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -116,6 +117,13 @@ export default function Apoderado() {
         // eslint-disable-next-line react/no-unstable-nested-components
         Cell: ({ value }) => (
           <div className="flex justify-between gap-4">
+            <Link to={`/apoderadoalumno/${value.id}`}>
+              <FontAwesomeIcon
+                className="text-xl text-green-500"
+                icon={faUserGroup}
+              />
+            </Link>
+
             <Link to={`/formapoderado/${value.id}`}>
               <FontAwesomeIcon
                 className="text-xl text-blue-500"
