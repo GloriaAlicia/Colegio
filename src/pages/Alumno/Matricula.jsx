@@ -9,6 +9,8 @@ import FormInput from '../../components/FormInput';
 import useForm from '../../hooks/useForm';
 import colegioApi from '../../api/colegioApi';
 import { Modal } from '../../components/Modal';
+import { postPDF } from '../../helpers/postPDF';
+// import { useGetPDF } from '../../hooks/useGetPDF';
 
 export default function Matricula() {
   const [
@@ -41,6 +43,7 @@ export default function Matricula() {
   const [isValid, setisValid] = useState(false);
 
   const [listGrado, setListGrado] = useState([]);
+  const [alumno, setAlumno] = useState({});
 
   const { id } = useParams();
   const [open, setOpen] = useState('hidden');
@@ -102,6 +105,22 @@ export default function Matricula() {
         console.log(error);
       });
   };
+
+  const getAlumno = (id) => {
+    colegioApi
+      .get(`alumno/${id}`)
+      .then((response) => {
+        console.log(response);
+        setAlumno(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getAlumno(id);
+  }, []);
 
   const cerrar = () => setOpen('hidden');
 
@@ -267,6 +286,30 @@ export default function Matricula() {
       </Modal>
 
       <div className="flex gap-10">
+        <button
+          type="submit"
+          className={
+            isValid
+              ? 'rounded-md bg-[#635DFF] py-1.5 px-10 text-xs text-white'
+              : 'cursor-not-allowed rounded-md bg-gray-500 py-1.5 px-10 text-xs text-gray-300'
+          }
+          onClick={() => {
+            if (isValid) {
+              postPDF({
+                alumno_id: id,
+                nombres: alumno.nombres,
+                nivel: nivelId,
+                grado: gradoId,
+                seccion: seccion,
+                turno: turnoId,
+                modalidad: modalidadId,
+              });
+            }
+          }}
+        >
+          Generar PDF
+        </button>
+
         <button
           type="submit"
           className={
