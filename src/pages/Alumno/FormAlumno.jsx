@@ -172,7 +172,7 @@ export default function FormAlumno() {
   };
 
   return (
-    <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-10 shadow-xl">
+    <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-0 sm:p-10 sm:shadow-xl">
       <div className="flex flex-col">
         <FontAwesomeIcon
           className="mb-3 text-5xl text-orange-400"
@@ -183,7 +183,7 @@ export default function FormAlumno() {
         </span>
       </div>
       <div>
-        <div className="grid grid-cols-2 gap-10">
+        <div className="flex flex-col gap-10 sm:grid sm:grid-cols-2">
           <FormInput
             id="nombres"
             description="Nombres"
@@ -288,7 +288,7 @@ export default function FormAlumno() {
           />
         </div>
       </div>
-      <div className="flex gap-10">
+      <div className="flex gap-3 sm:gap-10">
         <button
           type="submit"
           className={

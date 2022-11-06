@@ -12,10 +12,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Footer() {
   return (
-    <div className="w-full">
-      <div className="px-40 bg-[#00a8ff] text-white py-8 w-full">
-        <div className="flex justify-between max-w-[75rem] m-auto gap-8 flex-wrap">
-          <div className="grid grid-cols-3 gap-[0.7rem] w-[25rem] font-semibold text-xs">
+    <footer className="w-full">
+      <div className="w-full bg-[#00a8ff] py-8 text-white sm:px-40">
+        <div className="m-auto flex w-4/5 flex-wrap justify-between gap-8 sm:max-w-[75rem]">
+          <div className="grid grid-cols-3 gap-4 text-xs font-semibold sm:w-[25rem] sm:gap-[0.7rem]">
             <span className="text-sm font-bold">Nosotros</span>
             <span className="text-sm font-bold">Colegio</span>
             <span className="text-sm font-bold">Talleres</span>
@@ -48,16 +48,16 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="flex justify-between px-40 py-3 w-full max-w-[75rem] m-auto">
-        <span className="font-medium text-zinc-600">
+      <div className="m-auto flex w-full max-w-[75rem] flex-col justify-between px-8 py-3 sm:flex-row md:px-40">
+        <span className="text-center text-sm font-medium text-zinc-600 sm:text-base">
           Jesus de Nazareno - Todos los derechos reservados
         </span>
-        <div className="flex justify-center py-3 font-medium text-zinc-600 gap-4">
+        <div className="flex justify-center gap-4 py-3 font-medium text-zinc-600">
           <FontAwesomeIcon className="text-xl" icon={faFacebook} />
           <FontAwesomeIcon className="text-xl" icon={faInstagram} />
           <FontAwesomeIcon className="text-xl" icon={faTwitter} />
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

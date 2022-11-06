@@ -18,7 +18,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <main className="flex w-full flex-1 flex-col items-center">
-          <div className="w-full max-w-[75rem] p-8">
+          <div className="w-full max-w-[75rem] p-6 sm:p-8">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/alumno" element={<Alumno />} />

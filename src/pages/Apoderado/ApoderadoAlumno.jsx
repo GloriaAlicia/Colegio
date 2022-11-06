@@ -248,7 +248,7 @@ export default function ApoderadoAlumno() {
       </div>
       <Modal open={open} setOpen={setOpen} cerrar={cerrar} abrir={true}>
         <div className="flex w-11/12 items-center justify-between">
-          <h2 className="text-lg font-medium"> Asociar cursos </h2>
+          <h2 className="text-lg font-medium"> Asociar alumnos </h2>
 
           <div className="hover-scale-item flex w-32 cursor-default items-center gap-2 rounded-full bg-gray-100 py-2 px-5 hover:scale-100 md:w-56">
             <FontAwesomeIcon icon={faMagnifyingGlass} className="text-sm " />
