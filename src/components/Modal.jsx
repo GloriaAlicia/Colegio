@@ -29,7 +29,7 @@ export const Modal = ({ children, open, setOpen, cerrar, abrir }) => {
               >
                 <FontAwesomeIcon
                   icon={faXmark}
-                  className="text-2xl text-slate-900"
+                  className="rounded-md bg-white bg-opacity-50 py-1 px-2 text-2xl text-slate-800"
                   onClick={cerrar}
                 />
               </button>

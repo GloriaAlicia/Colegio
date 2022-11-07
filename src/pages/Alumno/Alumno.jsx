@@ -1,4 +1,5 @@
 import {
+  faClipboardUser,
   faGraduationCap,
   faMagnifyingGlass,
   faPenToSquare,
@@ -10,11 +11,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import colegioApi from '../../api/colegioApi';
+import { Modal } from '../../components/Modal';
 import Table from '../../components/Table';
 
 export default function Alumno() {
   const [data, setdata] = useState([]);
   const [searchValue, setsearchValue] = useState('');
+
+  const [alumno, setAlumno] = useState({});
+  const [openInforme, setOpenInforme] = useState('hidden');
+  const [alumnoAsignaturas, setAlumnoAsignaturas] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getAlumnos = () => {
     colegioApi
@@ -132,14 +139,56 @@ export default function Alumno() {
         accessor: 'custom',
         // eslint-disable-next-line react/no-unstable-nested-components
         Cell: ({ value }) => (
-          <div className="relative flex justify-between gap-4">
-            <Link
-              to={`/matricula/${value.id}`}
+          <div className="flex justify-between gap-4">
+            <FontAwesomeIcon
               className={`${
                 value.estaMatric
-                  ? 'before:w/5 pointer-events-none  before:absolute  before:left-2 before:h-full before:w-[2px] before:rotate-45 before:rounded-full before:bg-red-500'
-                  : ''
-              }   `}
+                  ? 'text-xl text-blue-500'
+                  : 'text-xl text-gray-400'
+              }`}
+              icon={faClipboardUser}
+              onClick={() => {
+                if (value.estaMatric) {
+                  setTimeout(() => {
+                    setOpenInforme('');
+                    const alumnoData = data.filter(
+                      (el) => el.alumno_id === value.id
+                    );
+                    setAlumno(alumnoData[0]);
+
+                    if (alumnoData.length === 0) {
+                      setTimeout(() => {
+                        colegioApi
+                          .get(`/alumno`)
+                          .then((response) => {
+                            const alumnoData = response.data.filter(
+                              (el) => el.alumno_id === value.id
+                            );
+                            console.log('se mando una segunda petición');
+                            setAlumno(alumnoData[0]);
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      }, 1000);
+                    }
+                  }, 1000);
+
+                  colegioApi
+                    .get(`matricula/asignaturas/${value.id}`)
+                    .then((response) => {
+                      setAlumnoAsignaturas(response.data);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      setAlumnoAsignaturas(error.response.data);
+                    });
+                }
+              }}
+            />
+            <Link
+              to={`/matricula/${value.id}`}
+              className={`${value.estaMatric ? 'pointer-events-none' : ''}   `}
             >
               <FontAwesomeIcon
                 className={`text-xl ${
@@ -166,9 +215,82 @@ export default function Alumno() {
     ],
     [eliminar]
   );
+  const cerrarInforme = () => setOpenInforme('hidden');
 
   return (
     <div className="w-full space-y-4 border-t border-gray-100 p-10 shadow-xl shadow-slate-400/10">
+      <Modal
+        open={openInforme}
+        setOpen={setOpenInforme}
+        cerrar={cerrarInforme}
+        abrir={false}
+      >
+        <div className="flex flex-col justify-center">
+          <h3 className="mb-4 rounded-md bg-blue-400 p-5 text-2xl font-bold text-white">
+            Informe del alumno {alumno?.nombres}
+          </h3>
+
+          <div className="flex flex-col">
+            <p>
+              <span className="font-bold">Nombre: </span>
+              {`${alumno?.nombres ?? '...'}`}
+            </p>
+            <p>
+              <span className="font-bold">Nivel: </span>
+              {alumno?.nivel ?? '...'}
+            </p>
+            <p>
+              <span className="font-bold">Grado: </span>
+              {alumno?.grado ?? '...'}
+            </p>
+            <p>
+              <span className="font-bold">Estado: </span>
+              {alumno?.estado ?? '...'}
+            </p>
+            <p>
+              <span className="font-bold">Turno: </span>
+              {alumno?.turno ?? '...'}
+            </p>
+            <p>
+              <span className="font-bold">Modalidad: </span>
+              {alumno?.modalidad ?? '...'}
+            </p>
+
+            <h3 className="my-4 rounded-md bg-blue-400 p-5 text-2xl font-bold text-white">
+              Asignaturas
+            </h3>
+
+            <table className="rounded-md">
+              <thead>
+                {alumnoAsignaturas.length > 1 ? (
+                  <tr className=" border bg-indigo-500 text-white">
+                    <th>Asignatura</th>
+                    <th>Profesor</th>
+                  </tr>
+                ) : (
+                  <tr>
+                    <th> {alumnoAsignaturas.errors} </th>
+                  </tr>
+                )}
+              </thead>
+              <tbody>
+                {Array.isArray(alumnoAsignaturas)
+                  ? alumnoAsignaturas?.map(({ asignatura, profesor }) => (
+                      <tr
+                        key={(asignatura += profesor)}
+                        className="mb-7 border text-center text-xs sm:text-base"
+                      >
+                        <td>{asignatura ?? ' - '}</td>
+                        <td>{profesor ?? ' - '}</td>
+                      </tr>
+                    ))
+                  : undefined}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Modal>
+
       <div className="text-center">
         <FontAwesomeIcon
           className="mb-3 text-5xl text-orange-400"
