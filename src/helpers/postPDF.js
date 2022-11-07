@@ -1,5 +1,3 @@
-import colegioApi from '../api/colegioApi';
-
 export const postPDF = (obj) => {
   if (obj.nivel === 'P') {
     obj.nivel = 'Primaria';
@@ -18,22 +16,21 @@ export const postPDF = (obj) => {
   } else {
     obj.turno = 'Tarde';
   }
-  console.log(obj);
-
-  colegioApi
-    .post(`matricula/export-to-pdf`, {
-      alumno_id: obj.alumno_id,
-      nombres: obj.nombres,
-      nivel: obj.nivel,
-      grado: obj.grado,
-      seccion: obj.seccion,
-      turno: obj.turno,
-      modalidad: obj.modalidad,
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return obj;
+  // colegioApi
+  //   .post(`matricula/export-to-pdf`, {
+  //     alumno_id: obj.alumno_id,
+  //     nombres: obj.nombres,
+  //     nivel: obj.nivel,
+  //     grado: obj.grado,
+  //     seccion: obj.seccion,
+  //     turno: obj.turno,
+  //     modalidad: obj.modalidad,
+  //   })
+  //   .then((response) => {
+  //     console.log(response);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 };

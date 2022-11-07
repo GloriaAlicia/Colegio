@@ -44,9 +44,12 @@ export default function Matricula() {
 
   const [listGrado, setListGrado] = useState([]);
   const [alumno, setAlumno] = useState({});
+  const [informe, setInforme] = useState({});
 
   const { id } = useParams();
   const [open, setOpen] = useState('hidden');
+  const [openInforme, setOpenInforme] = useState('hidden');
+  const [alumnoAsignaturas, setAlumnoAsignaturas] = useState([]);
 
   useEffect(() => {
     setisValid(
@@ -119,10 +122,12 @@ export default function Matricula() {
   };
 
   useEffect(() => {
-    getAlumno(id);
-  }, []);
+    console.log(informe);
+    console.log(alumnoAsignaturas);
+  }, [informe]);
 
   const cerrar = () => setOpen('hidden');
+  const cerrarInforme = () => setOpenInforme('hidden');
 
   return (
     <div className="m-auto my-8 flex w-fit flex-col items-center gap-10 border-t border-gray-100 p-0 sm:p-10 sm:shadow-xl">
@@ -285,6 +290,73 @@ export default function Matricula() {
         </div>
       </Modal>
 
+      <Modal
+        open={openInforme}
+        setOpen={setOpenInforme}
+        cerrar={cerrarInforme}
+        abrir={false}
+      >
+        <div className="flex flex-col justify-center">
+          <h3 className="mt-7 mb-4 rounded-md bg-blue-400 p-5 text-2xl font-bold text-white">
+            Informe del alumno {informe.nombres}
+          </h3>
+
+          <div className="flex flex-col">
+            <p>
+              <span className="font-bold">Nombre: </span>
+              {`${alumno.nombres} ${alumno.apellido_paterno} ${alumno.apellido_materno}` ??
+                'nombre'}
+            </p>
+            <p>
+              <span className="font-bold">Nivel: </span>
+              {informe.nivel}
+            </p>
+            <p>
+              <span className="font-bold">Grado: </span>
+              {informe.grado}
+            </p>
+            <p>
+              <span className="font-bold">Sección: </span>
+              {informe.seccion}
+            </p>
+            <p>
+              <span className="font-bold">Turno: </span>
+              {informe.turno}
+            </p>
+            <p>
+              <span className="font-bold">Modalidad: </span>
+              {informe.modalidad}
+            </p>
+
+            <h3 className="my-4 rounded-md bg-blue-400 p-5 text-2xl font-bold text-white">
+              Asignaturas
+            </h3>
+
+            <table className="rounded-md">
+              <thead>
+                {alumnoAsignaturas.length > 1 ? (
+                  <tr className=" border bg-indigo-500 text-white">
+                    <th>Asignatura</th>
+                    <th>Profesor</th>
+                  </tr>
+                ) : null}
+              </thead>
+              <tbody>
+                {alumnoAsignaturas?.map(({ asignatura, profesor }) => (
+                  <tr
+                    key={(asignatura += profesor)}
+                    className="mb-7 border text-center text-xs sm:text-base"
+                  >
+                    <td>{asignatura}</td>
+                    <td>{profesor}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Modal>
+
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-7">
         <button
           type="submit"
@@ -295,19 +367,34 @@ export default function Matricula() {
           }
           onClick={() => {
             if (isValid) {
-              postPDF({
-                alumno_id: id,
-                nombres: alumno.nombres,
-                nivel: nivelId,
-                grado: gradoId,
-                seccion: seccion,
-                turno: turnoId,
-                modalidad: modalidadId,
-              });
+              setInforme(
+                postPDF({
+                  alumno_id: id,
+                  nombres: alumno.nombres,
+                  nivel: nivelId,
+                  grado: gradoId,
+                  seccion: seccion,
+                  turno: turnoId,
+                  modalidad: modalidadId,
+                })
+              );
+
+              setOpenInforme('');
+
+              colegioApi
+                .get(`matricula/asignaturas/${id}`)
+                .then((response) => {
+                  console.log(response);
+                  setAlumnoAsignaturas(response.data);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              getAlumno(id);
             }
           }}
         >
-          Generar PDF
+          Mostrar informe
         </button>
 
         <button
