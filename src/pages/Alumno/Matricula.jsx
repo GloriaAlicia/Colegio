@@ -339,18 +339,24 @@ export default function Matricula() {
                     <th>Asignatura</th>
                     <th>Profesor</th>
                   </tr>
-                ) : null}
+                ) : (
+                  <tr>
+                    <th> {alumnoAsignaturas.errors} </th>
+                  </tr>
+                )}
               </thead>
               <tbody>
-                {alumnoAsignaturas?.map(({ asignatura, profesor }) => (
-                  <tr
-                    key={(asignatura += profesor)}
-                    className="mb-7 border text-center text-xs sm:text-base"
-                  >
-                    <td>{asignatura}</td>
-                    <td>{profesor}</td>
-                  </tr>
-                ))}
+                {Array.isArray(alumnoAsignaturas)
+                  ? alumnoAsignaturas?.map(({ asignatura, profesor }) => (
+                      <tr
+                        key={(asignatura += profesor)}
+                        className="mb-7 border text-center text-xs sm:text-base"
+                      >
+                        <td>{asignatura}</td>
+                        <td>{profesor}</td>
+                      </tr>
+                    ))
+                  : undefined}
               </tbody>
             </table>
           </div>
@@ -384,11 +390,12 @@ export default function Matricula() {
               colegioApi
                 .get(`matricula/asignaturas/${id}`)
                 .then((response) => {
-                  console.log(response);
+                  console.log(response.data.errors);
                   setAlumnoAsignaturas(response.data);
                 })
                 .catch((error) => {
                   console.log(error);
+                  setAlumnoAsignaturas(error.response.data);
                 });
               getAlumno(id);
             }
