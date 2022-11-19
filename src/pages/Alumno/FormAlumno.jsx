@@ -80,7 +80,7 @@ export default function FormAlumno() {
 
   useEffect(() => {
     if (departamentoID !== '') {
-      setFormState((state) => ({ ...state, provincia: '', distrito: '' }));
+      setFormState((state) => ({ ...state, provinciaID: '', distritoID: '' }));
 
       setubi((ubi) => ({
         ...ubi,
@@ -92,7 +92,7 @@ export default function FormAlumno() {
 
   useEffect(() => {
     if (provinciaID !== '') {
-      setFormState((state) => ({ ...state, distrito: '' }));
+      setFormState((state) => ({ ...state, distritoID: '' }));
 
       setubi((ubi) => ({
         ...ubi,

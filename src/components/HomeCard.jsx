@@ -12,7 +12,7 @@ export default function HomeCard({ icon, title, path }) {
       </div>
       <span className="mb-2 block text-xl font-bold">{title}</span>
       <div className="mb-2 h-0.5 w-14 bg-[#e74040]" />
-      <p className="max-w-[14rem] text-sm text-slate-400">
+      <p className="max-w-[14rem] text-sm text-slate-500">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis
         inventore culpa aperiam eius porro et modi fugit dolor minus laboriosam
         accusamus dicta itaque hic voluptas repellat sequi, vero totam.

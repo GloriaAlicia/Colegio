@@ -143,8 +143,8 @@ export default function Alumno() {
             <FontAwesomeIcon
               className={`${
                 value.estaMatric
-                  ? 'text-xl text-blue-500'
-                  : 'text-xl text-gray-400'
+                  ? 'cursor-pointer text-xl text-blue-500'
+                  : 'cursor-not-allowed text-xl text-gray-400'
               }`}
               icon={faClipboardUser}
               onClick={() => {
@@ -188,11 +188,13 @@ export default function Alumno() {
             />
             <Link
               to={`/matricula/${value.id}`}
-              className={`${value.estaMatric ? 'pointer-events-none' : ''}   `}
+              className={`${
+                value.estaMatric ? 'pointer-events-none cursor-not-allowed' : ''
+              }   `}
             >
               <FontAwesomeIcon
                 className={`text-xl ${
-                  value.estaMatric ? 'cursor-not-allowed text-gray-400' : ''
+                  value.estaMatric ? ' text-gray-400' : ''
                 }   `}
                 icon={faGraduationCap}
               />

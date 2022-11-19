@@ -9,8 +9,6 @@ import FormInput from '../../components/FormInput';
 import useForm from '../../hooks/useForm';
 import colegioApi from '../../api/colegioApi';
 import { Modal } from '../../components/Modal';
-import { postPDF } from '../../helpers/postPDF';
-// import { useGetPDF } from '../../hooks/useGetPDF';
 
 export default function Matricula() {
   const [
